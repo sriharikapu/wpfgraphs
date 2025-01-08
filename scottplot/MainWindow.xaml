@@ -2,14 +2,48 @@
     x:Class="WpfApp.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ScottPlot="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
-    Title="ScottPlot WPF Example"
-    Width="525"
-    Height="350">
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:oxy="http://oxyplot.org/wpf"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
     <Grid>
-        <ScottPlot:WpfPlot
-            x:Name="WpfPlot1"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!--  OxyPlot Graph  -->
+        <oxy:PlotView x:Name="plotView" Grid.Row="0" />
+
+        <!--  Buttons for Graph Control  -->
+        <StackPanel
+            Grid.Row="1"
+            Margin="10"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+            <Button
+                Margin="5"
+                Click="ResetGraph_Click"
+                Content="Reset" />
+            <Button
+                Margin="5"
+                Click="ScrollLeft_Click"
+                Content="Scroll Left" />
+            <Button
+                Margin="5"
+                Click="ScrollRight_Click"
+                Content="Scroll Right" />
+            <Button
+                Margin="5"
+                Click="ZoomIn_Click"
+                Content="Zoom In" />
+            <Button
+                Margin="5"
+                Click="ZoomOut_Click"
+                Content="Zoom Out" />
+        </StackPanel>
     </Grid>
 </Window>
