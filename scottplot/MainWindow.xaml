@@ -15,8 +15,12 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!--  OxyPlot Graph  -->
-        <oxy:PlotView x:Name="plotView" Grid.Row="0" />
+        <!--  OxyPlot Graph - no content inside PlotView  -->
+        <oxy:PlotView
+            x:Name="plotView"
+            Grid.Row="0"
+            MouseEnter="MyPlot_MouseEnter"
+            MouseLeave="MyPlot_MouseLeave" />
 
         <!--  Buttons for Graph Control  -->
         <StackPanel
@@ -44,6 +48,11 @@
                 Margin="5"
                 Click="ZoomOut_Click"
                 Content="Zoom Out" />
+            <Button
+                x:Name="FreezeButton"
+                Margin="5"
+                Click="FreezeGraph_Click"
+                Content="Freeze" />
         </StackPanel>
     </Grid>
 </Window>
