@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Newtonsoft.Json;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -18,67 +20,66 @@ namespace WpfApp
         private List<double> dataY2 = new List<double>();
         private List<double> dataY3 = new List<double>();
         private List<double> dataYN = new List<double>();
-        private int windowSize = 50;
+        private int windowSize = 500;
+        private bool isFrozen = false;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Loaded += (s, e) =>
+            // Create PlotModel and configure axes and series
+            var plotModel = new PlotModel { Title = "Real-time Data Plot" };
+
+            // Create LineSeries for each dataset
+            var lineSeriesI1 = new LineSeries
             {
-                var plotModel = new PlotModel { Title = "Real-time Data Plot" };
-
-                // Create LineSeries for each dataset
-                var lineSeriesI1 = new LineSeries
-                {
-                    Title = "I1",
-                    Color = OxyColors.SkyBlue,
-                    StrokeThickness = 4
-                };
-
-                var lineSeriesI2 = new LineSeries
-                {
-                    Title = "I2",
-                    Color = OxyColors.Red,
-                    StrokeThickness = 4
-                };
-
-                var lineSeriesI3 = new LineSeries
-                {
-                    Title = "I3",
-                    Color = OxyColors.Green,
-                    StrokeThickness = 4
-                };
-
-                var lineSeriesIN = new LineSeries
-                {
-                    Title = "IN",
-                    Color = OxyColors.Orange,
-                    StrokeThickness = 4
-                };
-
-                // Add LineSeries to the plot model
-                plotModel.Series.Add(lineSeriesI1);
-                plotModel.Series.Add(lineSeriesI2);
-                plotModel.Series.Add(lineSeriesI3);
-                plotModel.Series.Add(lineSeriesIN);
-
-                plotModel.Axes.Add(new DateTimeAxis
-                {
-                    Position = AxisPosition.Bottom,
-                    StringFormat = "HH:mm:ss",
-                    Title = "Timestamp"
-                });
-
-                plotModel.Axes.Add(new LinearAxis
-                {
-                    Position = AxisPosition.Left,
-                    Title = "Value"
-                });
-
-                plotView.Model = plotModel;
-
+                Title = "I1",
+                Color = OxyColors.SkyBlue,
+                StrokeThickness = 4
             };
+
+            var lineSeriesI2 = new LineSeries
+            {
+                Title = "I2",
+                Color = OxyColors.Red,
+                StrokeThickness = 4
+            };
+
+            var lineSeriesI3 = new LineSeries
+            {
+                Title = "I3",
+                Color = OxyColors.Green,
+                StrokeThickness = 4
+            };
+
+            var lineSeriesIN = new LineSeries
+            {
+                Title = "IN",
+                Color = OxyColors.Orange,
+                StrokeThickness = 4
+            };
+
+            // Add LineSeries to the plot model
+            plotModel.Series.Add(lineSeriesI1);
+            plotModel.Series.Add(lineSeriesI2);
+            plotModel.Series.Add(lineSeriesI3);
+            plotModel.Series.Add(lineSeriesIN);
+
+            // Configure X and Y axes
+            plotModel.Axes.Add(new DateTimeAxis
+            {
+                Position = AxisPosition.Bottom,
+                StringFormat = "HH:mm:ss",
+                //Title = "Timestamp"
+            });
+
+            plotModel.Axes.Add(new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                //Title = "Value"
+            });
+
+            plotView.Model = plotModel; // Bind PlotModel to PlotView
 
             StartUpdatingPlot();
         }
@@ -115,6 +116,12 @@ namespace WpfApp
 
                 for (int i = 0; i < dataPointsI1.Count; i++)
                 {
+                    if (isFrozen) // Skip updates if the graph is frozen
+                    {
+                        Thread.Sleep(500);
+                        continue;
+                    }
+
                     // Update data for all datasets
                     var pointI1 = dataPointsI1[i];
                     var pointI2 = dataPointsI2[i];
@@ -153,14 +160,24 @@ namespace WpfApp
 
                         var maxX = DateTimeAxis.ToDouble(dataX[dataX.Count - 1]);
                         var minX = DateTimeAxis.ToDouble(dataX[Math.Max(dataX.Count - windowSize, 0)]);
-                        var minY = Math.Min(Math.Min(dataY1.Min(), Math.Min(dataY2.Min(), Math.Min(dataY3.Min(), dataYN.Min()))), 0);
-                        var maxY = Math.Max(Math.Max(dataY1.Max(), Math.Max(dataY2.Max(), Math.Max(dataY3.Max(), dataYN.Max()))), 300);
+                       
+                        // Calculate the dynamic range with some padding
+                        double minY = Math.Min(Math.Min(dataY1.Min(), Math.Min(dataY2.Min(), Math.Min(dataY3.Min(), dataYN.Min()))), 0);
+                        double maxY = Math.Max(Math.Max(dataY1.Max(), Math.Max(dataY2.Max(), Math.Max(dataY3.Max(), dataYN.Max()))), 0);
+
+                        // Add padding to Y-axis for better visualization
+                        double padding = (maxY - minY) * 0.1;
+                        minY -= padding;
+                        maxY += padding+100;
+
+                        // Update Y-axis limits dynamically
+                        plotModel.Axes[1].Minimum = minY;
+                        plotModel.Axes[1].Maximum = maxY;
+
 
                         // Update axes limits
                         plotModel.Axes[0].Minimum = minX;
                         plotModel.Axes[0].Maximum = maxX;
-                        plotModel.Axes[1].Minimum = minY;
-                        plotModel.Axes[1].Maximum = maxY;
 
                         plotView.InvalidatePlot(true);
                     });
@@ -172,9 +189,29 @@ namespace WpfApp
             backgroundThread.IsBackground = true;
             backgroundThread.Start();
         }
-    
 
-      private void ResetGraph_Click(object sender, RoutedEventArgs e)
+        private void MyPlot_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+
+            var plotModel = plotView.Model;
+            plotModel.IsLegendVisible = true;
+            // Simulate a button click programmatically by passing the FreezeButton as the sender 
+            // Code to Freeze the graph
+            // FreezeGraph_Click(FreezeButton, new RoutedEventArgs(Button.ClickEvent));
+            plotView.InvalidatePlot(true);
+        }
+
+        private void MyPlot_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+
+            var plotModel = plotView.Model;
+            plotModel.IsLegendVisible = false;
+            plotView.InvalidatePlot(true);
+        }
+
+
+
+        private void ResetGraph_Click(object sender, RoutedEventArgs e)
         {
             var plotModel = plotView.Model;
 
@@ -184,34 +221,6 @@ namespace WpfApp
             }
 
             plotView.InvalidatePlot(true);
-        }
-
-        private void ScrollLeft_Click(object sender, RoutedEventArgs e)
-        {
-            var xAxis = plotView.Model.Axes[0] as DateTimeAxis;
-
-            if (xAxis != null)
-            {
-                double range = xAxis.ActualMaximum - xAxis.ActualMinimum;
-                xAxis.Minimum -= range * 0.1;
-                xAxis.Maximum -= range * 0.1;
-
-                plotView.InvalidatePlot(true);
-            }
-        }
-
-        private void ScrollRight_Click(object sender, RoutedEventArgs e)
-        {
-            var xAxis = plotView.Model.Axes[0] as DateTimeAxis;
-
-            if (xAxis != null)
-            {
-                double range = xAxis.ActualMaximum - xAxis.ActualMinimum;
-                xAxis.Minimum += range * 0.1;
-                xAxis.Maximum += range * 0.1;
-
-                plotView.InvalidatePlot(true);
-            }
         }
 
         private void ZoomIn_Click(object sender, RoutedEventArgs e)
@@ -226,9 +235,12 @@ namespace WpfApp
 
                 xAxis.Minimum += xRange * 0.1;
                 xAxis.Maximum -= xRange * 0.1;
+
                 yAxis.Minimum += yRange * 0.1;
                 yAxis.Maximum -= yRange * 0.1;
 
+                xAxis.Reset(); // Ensure changes are preserved
+                yAxis.Reset();
                 plotView.InvalidatePlot(true);
             }
         }
@@ -245,11 +257,52 @@ namespace WpfApp
 
                 xAxis.Minimum -= xRange * 0.1;
                 xAxis.Maximum += xRange * 0.1;
+
                 yAxis.Minimum -= yRange * 0.1;
                 yAxis.Maximum += yRange * 0.1;
 
+                xAxis.Reset();
+                yAxis.Reset();
                 plotView.InvalidatePlot(true);
             }
         }
+
+        private void ScrollLeft_Click(object sender, RoutedEventArgs e)
+        {
+            var xAxis = plotView.Model.Axes[0] as DateTimeAxis;
+
+            if (xAxis != null)
+            {
+                double range = xAxis.ActualMaximum - xAxis.ActualMinimum;
+                xAxis.Minimum -= range * 0.1;
+                xAxis.Maximum -= range * 0.1;
+
+                xAxis.Reset();
+                plotView.InvalidatePlot(true);
+            }
+        }
+
+        private void ScrollRight_Click(object sender, RoutedEventArgs e)
+        {
+            var xAxis = plotView.Model.Axes[0] as DateTimeAxis;
+
+            if (xAxis != null)
+            {
+                double range = xAxis.ActualMaximum - xAxis.ActualMinimum;
+                xAxis.Minimum += range * 0.1;
+                xAxis.Maximum += range * 0.1;
+
+                xAxis.Reset();
+                plotView.InvalidatePlot(true);
+            }
+        }
+
+
+        private void FreezeGraph_Click(object sender, RoutedEventArgs e)
+        {
+            isFrozen = !isFrozen; // Toggle the freeze state
+            (sender as Button).Content = isFrozen ? "Unfreeze" : "Freeze"; // Change button text
+        }
+
     }
 }
