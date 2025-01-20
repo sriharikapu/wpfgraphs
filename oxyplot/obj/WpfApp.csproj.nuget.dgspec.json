@@ -62,6 +62,14 @@
             "OxyPlot.Wpf": {
               "target": "Package",
               "version": "[2.2.0, )"
+            },
+            "ScottPlot": {
+              "target": "Package",
+              "version": "[5.0.53, )"
+            },
+            "ScottPlot.WPF": {
+              "target": "Package",
+              "version": "[5.0.53, )"
             }
           },
           "imports": [

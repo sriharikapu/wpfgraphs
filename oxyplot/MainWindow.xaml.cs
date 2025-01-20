@@ -28,7 +28,8 @@ namespace WpfApp
             InitializeComponent();
 
             // Create PlotModel and configure axes and series
-            var plotModel = new PlotModel { Title = "Real-time Data Plot" };
+            //Title = "Real-time Data Plot"
+            var plotModel = new PlotModel { };
 
             // Create LineSeries for each dataset
             var lineSeriesI1 = new LineSeries
@@ -160,7 +161,7 @@ namespace WpfApp
 
                         var maxX = DateTimeAxis.ToDouble(dataX[dataX.Count - 1]);
                         var minX = DateTimeAxis.ToDouble(dataX[Math.Max(dataX.Count - windowSize, 0)]);
-                       
+
                         // Calculate the dynamic range with some padding
                         double minY = Math.Min(Math.Min(dataY1.Min(), Math.Min(dataY2.Min(), Math.Min(dataY3.Min(), dataYN.Min()))), 0);
                         double maxY = Math.Max(Math.Max(dataY1.Max(), Math.Max(dataY2.Max(), Math.Max(dataY3.Max(), dataYN.Max()))), 0);
@@ -168,7 +169,7 @@ namespace WpfApp
                         // Add padding to Y-axis for better visualization
                         double padding = (maxY - minY) * 0.1;
                         minY -= padding;
-                        maxY += padding+100;
+                        maxY += padding + 100;
 
                         // Update Y-axis limits dynamically
                         plotModel.Axes[1].Minimum = minY;

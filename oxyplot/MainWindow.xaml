@@ -11,48 +11,100 @@
     mc:Ignorable="d">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <!--  Graph area occupies 90% of height  -->
+            <RowDefinition Height="9*" />
+            <!--  Button panel occupies 10% of height  -->
+            <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <!--  Graph area occupies 90% of height  -->
+            <ColumnDefinition Width="8*" />
+            <!--  Button panel occupies 10% of height  -->
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
 
-        <!--  OxyPlot Graph - no content inside PlotView  -->
+        <!--  OxyPlot Graph  -->
         <oxy:PlotView
             x:Name="plotView"
             Grid.Row="0"
+            Grid.Column="0"
             MouseEnter="MyPlot_MouseEnter"
             MouseLeave="MyPlot_MouseLeave" />
 
-        <!--  Buttons for Graph Control  -->
-        <StackPanel
-            Grid.Row="1"
-            Margin="10"
-            HorizontalAlignment="Center"
-            Orientation="Horizontal">
+        <!--  Canvas Grid (replacing Button Grid)  -->
+        <Canvas Grid.Row="1" Margin="10">
+            <!--  Left Section: Buttons for Graph Control  -->
             <Button
+                Canvas.Left="10"
+                Canvas.Top="10"
                 Margin="5"
                 Click="ResetGraph_Click"
                 Content="Reset" />
             <Button
+                Canvas.Left="100"
+                Canvas.Top="10"
                 Margin="5"
                 Click="ScrollLeft_Click"
                 Content="Scroll Left" />
             <Button
+                Canvas.Left="200"
+                Canvas.Top="10"
                 Margin="5"
                 Click="ScrollRight_Click"
                 Content="Scroll Right" />
             <Button
+                Canvas.Left="300"
+                Canvas.Top="10"
                 Margin="5"
                 Click="ZoomIn_Click"
                 Content="Zoom In" />
             <Button
+                Canvas.Left="400"
+                Canvas.Top="10"
                 Margin="5"
                 Click="ZoomOut_Click"
                 Content="Zoom Out" />
             <Button
-                x:Name="FreezeButton"
+                Canvas.Left="500"
+                Canvas.Top="10"
                 Margin="5"
                 Click="FreezeGraph_Click"
                 Content="Freeze" />
-        </StackPanel>
+        </Canvas>
+        <!--  Right Section: Mouse Position  -->
+        <Border
+            Grid.Row="0"
+            Grid.Column="1"
+            Canvas.Left="620"
+            Canvas.Top="10"
+            Margin="0,15,15,15"
+            BorderBrush="Transparent"
+            BorderThickness="0"
+            CornerRadius="0">
+            <ListView>
+                <ListBox
+                    Height="80"
+                    MinWidth="195"
+                    MaxWidth="300"
+                    Background="LightGray" />
+                <ListBox
+                    Height="80"
+                    MinWidth="195"
+                    MaxWidth="300"
+                    Background="LightGray" />
+                <ListBox
+                    Height="80"
+                    MinWidth="195"
+                    MaxWidth="300"
+                    Background="LightGray" />
+                <ListBox
+                    Height="80"
+                    MinWidth="195"
+                    MaxWidth="300"
+                    Background="LightGray" />
+            </ListView>
+        </Border>
+
     </Grid>
+
 </Window>

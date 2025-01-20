@@ -1,0 +1,10 @@
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\WpfApp.csproj.AssemblyReference.cache
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\MainWindow.baml
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\MainWindow.g.cs
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\WpfApp_MarkupCompile.cache
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\WpfApp.g.resources
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\WpfApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\WpfApp.AssemblyInfoInputs.cache
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\WpfApp.AssemblyInfo.cs
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\WpfApp.csproj.CoreCompileInputs.cache
+C:\Users\sriha\repos\github\wpfgraphs\scottplot\obj\Debug\net8.0-windows\WpfApp.sourcelink.json

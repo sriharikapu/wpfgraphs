@@ -71,13 +71,13 @@ namespace WpfApp
                     dataY.Add(point.Value);
 
                     //// Simulate new data
-                    double[] newX = dataX.ToArray() ;
+                    double[] newX = dataX.ToArray();
                     string labelX = point.Timestamp.ToString("HH:mm:ss"); // Use HH:mm:ss format for X
-                    
-    
 
-                        // Update plot on the UI thread using Dispatcher
-                        Dispatcher.Invoke(() =>
+
+
+                    // Update plot on the UI thread using Dispatcher
+                    Dispatcher.Invoke(() =>
                     {
                         // Add new scatter plot with connected dots (line)
                         WpfPlot1.Plot.Clear(); // Clear existing plot before redrawing
