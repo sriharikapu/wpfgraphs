@@ -1,0 +1,3 @@
+C:\Users\sriha\repos\github\wpfgraphs\livecharts2\WpfApp\WpfApp\obj\Debug\net8.0-windows\WpfApp.csproj.AssemblyReference.cache
+C:\Users\sriha\repos\github\wpfgraphs\livecharts2\WpfApp\WpfApp\obj\Debug\net8.0-windows\App.g.cs
+C:\Users\sriha\repos\github\wpfgraphs\livecharts2\WpfApp\WpfApp\obj\Debug\net8.0-windows\WpfApp_MarkupCompile.cache
